@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/lunny/log"
 	"github.com/Unknwon/goconfig"
-	"go-example/pkg/dirver"
+	"github.com/mir134/go-example/pkg/dirver"
 )
 
 func main() {
