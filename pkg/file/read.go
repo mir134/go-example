@@ -68,7 +68,9 @@ func ReadEachLineReader(filePath string) {
 		//fmt.Println(Capitalize(countSplit[1]))
 		//fmt.Println(string(line))
 		if len(countSplit) > 1 {
-			fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], Capitalize(countSplit[1]), 1))
+			// fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], Capitalize(countSplit[1]), 1))  Capitalize 大写
+			fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], ReplaceNumber(countSplit[0]), 1)) // 替换用户名数字
+
 		}
 	}
 	fmt.Println("LineReader spend : ", time.Now().Sub(start1))
@@ -93,3 +95,20 @@ func Capitalize(str string) string {
 	}
 	return upperStr
 }
+// Capitalize 字符首字母大写
+func ReplaceNumber(str string) string {
+	var resStr string
+	vv := []rune(str)   // 后文有介绍
+	for i := 0; i < len(vv); i++ {
+		if vv[i] >= 48 && vv[i] <= 57 {  // 0 到 9
+
+		} else {
+			resStr += string(vv[i])
+			//fmt.Println("Not begins with lowercase letter,")
+			//return str
+		}
+
+	}
+	return resStr
+}
+
