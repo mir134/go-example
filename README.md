@@ -11,3 +11,9 @@ build
 build
 - go build -ldflags "-s -w" cmd/socks5/socks5.go
 - go run cmd/socks5/socks5.go
+
+
+## file replace
+build
+- go build -ldflags "-s -w" cmd/file.go
+- go run cmd/file.go

@@ -36,7 +36,7 @@ func ReadBlock(filePath string) {
 	fmt.Println("readBolck spend : ", time.Now().Sub(start1))
 }
 
-func ReadEachLineReader(filePath string) {
+func ReadEachLineReader(filePath string, fileType string) {
 	start1 := time.Now()
 	FileHandle, err := os.Open(filePath)
 	if err != nil {
@@ -44,12 +44,11 @@ func ReadEachLineReader(filePath string) {
 		return
 	}
 
-	f, err := os.Create("ok.txt")
+	f, err := os.Create("ok_"+ fileType+ ".txt")
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	fmt.Println(filePath)
 	defer FileHandle.Close()
 	defer f.Close()
 	lineReader := bufio.NewReader(FileHandle)
@@ -68,12 +67,33 @@ func ReadEachLineReader(filePath string) {
 		//fmt.Println(Capitalize(countSplit[1]))
 		//fmt.Println(string(line))
 		if len(countSplit) > 1 {
-			// fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], Capitalize(countSplit[1]), 1))  Capitalize 大写
-			fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], ReplaceNumber(countSplit[0]), 1)) // 替换用户名数字
-
+			switch fileType {
+				case "1":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], Capitalize(countSplit[1]), 1))  // Capitalize 大写
+				case "2":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], ReplaceNumber(countSplit[0]), 1)) // 替换用户名数字
+				case "3":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], "q" + countSplit[0], 1)) // 用户名加q
+				case "4":
+					fmt.Fprintln(f,  countSplit[1] + "----" + countSplit[0]) // 用户名密码互换
+				case "5":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], UpperCase(countSplit[1]), 1)) // 密码大写
+				case "6":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], ReplaceNumber(countSplit[1]), 1)) // 替换密码数字
+				case "7":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0][0 : len(countSplit[0])-1], 1)) // 替换用户名截取少一位
+				case "8":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], countSplit[1] + "1", 1)) // 密码加1
+				case "9":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0]+ "1", 1)) // 账号加1
+				case "10":
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], countSplit[1] + "!", 1)) // 密码加叹号
+				default:
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], Capitalize(countSplit[1]), 1))  //Capitalize 大写
+			}
 		}
 	}
-	fmt.Println("LineReader spend : ", time.Now().Sub(start1))
+	fmt.Println("处理用时: ", time.Now().Sub(start1))
 }
 
 // Capitalize 字符首字母大写
@@ -110,5 +130,20 @@ func ReplaceNumber(str string) string {
 
 	}
 	return resStr
+}
+
+// Upcase 字符字母大写
+func UpperCase(str string) string {
+	var upperStr string
+	vv := []rune(str)   // 后文有介绍
+	for i := 0; i < len(vv); i++ {
+		if vv[i] >= 97 && vv[i] <= 122 {  // 后文有介绍
+			vv[i] -= 32 // string的码表相差32位
+			upperStr += string(vv[i])
+		} else {
+			upperStr += string(vv[i])
+		}
+	}
+	return upperStr
 }
 
