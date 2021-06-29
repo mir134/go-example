@@ -12,5 +12,6 @@ CMD 到file.exe 目录下，运行下面命令处理对应类型
 .\file.exe -f mm.txt -t 8  // 密码加1
 .\file.exe -f mm.txt -t 9  //  账号加1
 .\file.exe -f mm.txt -t 10  // 密码加叹号
+.\file.exe -f mm.txt -t 11  // 替换账号@后面字符
 
 

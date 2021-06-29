@@ -8,6 +8,7 @@ import (
 "time"
 	"bufio"
 	"strings"
+	"regexp"
 )
 
 // 文件一块一块的读取
@@ -87,7 +88,12 @@ func ReadEachLineReader(filePath string, fileType string) {
 				case "9":
 					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0]+ "1", 1)) // 账号加1
 				case "10":
-					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], countSplit[1] + "!", 1)) // 密码加叹号
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], countSplit[1] + "!", 1)) // 密码加叹号1
+				case "11":
+					pat := "@\\S+$"
+					re, _ := regexp.Compile(pat)
+					str := re.ReplaceAllString(countSplit[0], "")
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], str, 1)) // 替换账号@后面字符
 				default:
 					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], Capitalize(countSplit[1]), 1))  //Capitalize 大写
 			}
