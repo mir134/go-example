@@ -8,10 +8,12 @@ CMD 到file.exe 目录下，运行下面命令处理对应类型
 .\file.exe -f mm.txt -t 4  // 用户名密码互换
 .\file.exe -f mm.txt -t 5  // 密码大写
 .\file.exe -f mm.txt -t 6  // 替换密码数字
-.\file.exe -f mm.txt -t 7  // 替换用户名截取少一位
+.\file.exe -f mm.txt -t 7  // 替换用户名截取少最后一位
 .\file.exe -f mm.txt -t 8  // 密码加1
 .\file.exe -f mm.txt -t 9  //  账号加1
 .\file.exe -f mm.txt -t 10  // 密码加叹号
 .\file.exe -f mm.txt -t 11  // 替换账号@后面字符
+.\file.exe -f mm.txt -t 12  // 替换用户名截取少第一位
 
-
+生成文件夹 用户密码文件夹，复制3333ssfn文件，3333ssfn为实际 ssfn文件，文件名对应修改
+.\file2.exe -f mm.txt -s 3333ssfn -t 1  // 生成文件夹

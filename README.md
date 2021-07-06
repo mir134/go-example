@@ -17,3 +17,6 @@ build
 build
 - go build -ldflags "-s -w" cmd/file.go
 - go run cmd/file.go
+
+- go build -ldflags "-s -w" cmd/file2.go
+- go run cmd/file2.go

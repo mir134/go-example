@@ -82,7 +82,7 @@ func ReadEachLineReader(filePath string, fileType string) {
 				case "6":
 					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], ReplaceNumber(countSplit[1]), 1)) // 替换密码数字
 				case "7":
-					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0][0 : len(countSplit[0])-1], 1)) // 替换用户名截取少一位
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0][0 : len(countSplit[0])-1], 1)) // 替换用户名截取少最后一位
 				case "8":
 					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], countSplit[1] + "1", 1)) // 密码加1
 				case "9":
@@ -94,12 +94,86 @@ func ReadEachLineReader(filePath string, fileType string) {
 					re, _ := regexp.Compile(pat)
 					str := re.ReplaceAllString(countSplit[0], "")
 					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], str, 1)) // 替换账号@后面字符
+				case "12":
+					if len(countSplit[0]) > 1 {
+						fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0][1:len(countSplit[0])], 1)) // 替换用户名截取少第一位
+					}
 				default:
 					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], Capitalize(countSplit[1]), 1))  //Capitalize 大写
 			}
 		}
 	}
 	fmt.Println("处理用时: ", time.Now().Sub(start1))
+}
+
+func ReadEachLineReaderCreateDir(filePath string, ssfnPath string, fileType string) {
+	start1 := time.Now()
+	FileHandle, err := os.Open(filePath)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer FileHandle.Close()
+	lineReader := bufio.NewReader(FileHandle)
+	for {
+		// 相同使用场景下可以采用的方法
+		// func (b *Reader) ReadLine() (line []byte, isPrefix bool, err error)
+		// func (b *Reader) ReadBytes(delim byte) (line []byte, err error)
+		// func (b *Reader) ReadString(delim byte) (line string, err error)
+		line, _, err := lineReader.ReadLine()
+		if err == io.EOF {
+			break
+		}
+		// 如下是某些业务逻辑操作
+		// 如下代码打印每次读取的文件行内容
+		countSplit := strings.Split(string(line), "----")
+		//fmt.Println(Capitalize(countSplit[1]))
+		//fmt.Println(string(line))
+		if len(countSplit) > 1 {
+			switch fileType {
+				case "1":
+					MkUserDir(countSplit[0], countSplit[1], ssfnPath)  // 创建文件夹
+
+				default:
+
+			}
+		}
+	}
+	fmt.Println("处理用时: ", time.Now().Sub(start1))
+}
+
+func MkUserDir(user string, pass string, srcFile string) bool{
+	os.MkdirAll("ok_data/" + user, os.ModePerm)
+	f, err := os.Create("ok_data/"+ user + "/"+ user+ ".txt")
+	targFile := "ok_data/"+ user + "/"+ srcFile
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	defer f.Close()
+	fmt.Fprintln(f,  user + "----" + pass) // 用户名密码互换
+
+	srcSources, err := os.Open(srcFile)
+	//if file to open the file err isnt nil
+	//but in php before do it we must to use file_exists to check the file is exsits
+	if err != nil {
+		fmt.Println("cant to open the file check it is exists or not")
+		return false
+	}
+	// create a new file
+	tar, err := os.Create(targFile)
+	if err != nil {
+		fmt.Println("cant create the file")
+		return false
+	}
+	defer tar.Close()
+	defer srcSources.Close()
+	scanner := bufio.NewScanner(srcSources)
+	for scanner.Scan() {
+		tar.Write(scanner.Bytes())
+		tar.Write([]byte("\n"))
+	}
+	return true
 }
 
 // Capitalize 字符首字母大写
