@@ -17,3 +17,4 @@ CMD 到file.exe 目录下，运行下面命令处理对应类型
 
 生成文件夹 用户密码文件夹，复制3333ssfn文件，3333ssfn为实际 ssfn文件，文件名对应修改
 .\file2.exe -f mm.txt -s 3333ssfn -t 1  // 生成文件夹
+.\file2.exe -f mm.txt  -t 2  // 迁移old_data 用户文件夹到 new_data

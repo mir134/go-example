@@ -9,6 +9,7 @@ import (
 	"bufio"
 	"strings"
 	"regexp"
+	"path/filepath"
 )
 
 // 文件一块一块的读取
@@ -133,13 +134,40 @@ func ReadEachLineReaderCreateDir(filePath string, ssfnPath string, fileType stri
 			switch fileType {
 				case "1":
 					MkUserDir(countSplit[0], countSplit[1], ssfnPath)  // 创建文件夹
-
+				case "2":
+					//fmt.Println("处理用户: ", countSplit[0])
+					CopyUser(countSplit[0]) // 迁移old_data 用户文件夹到 new_data
 				default:
 
 			}
 		}
 	}
 	fmt.Println("处理用时: ", time.Now().Sub(start1))
+}
+
+func CopyUser(user string)  {
+	b, _ := PathExists("old_data\\" + user)
+	//fmt.Println("CopyUser文件: ", b)
+	if b == true {
+		fmt.Println("文件: ", b)
+		b, _ := PathExists("new_data\\")
+		if b == false {
+			err := os.Mkdir("new_data\\", os.ModePerm) //在当前目录下生成md目录
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		c, _ := PathExists("new_data\\" + user)
+		if c == false {
+			err := os.Mkdir("new_data\\" + user, os.ModePerm) //在当前目录下生成md目录
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		copyDir("old_data\\" + user, "new_data\\" + user)
+		os.RemoveAll("old_data\\" + user)
+	}
+
 }
 
 func MkUserDir(user string, pass string, srcFile string) bool{
@@ -227,3 +255,77 @@ func UpperCase(str string) string {
 	return upperStr
 }
 
+func copyDir(src string, dest string) {
+	src_original := src
+	err := filepath.Walk(src, func(src string, f os.FileInfo, err error) error {
+		if f == nil {
+			return err
+		}
+		if f.IsDir() {
+			//fmt.Println(f.Name())
+			//os.Mkdir(dest +"\\" + f.Name(), os.ModePerm)
+			//fmt.Println("CopyFile:" + src + " to " + dest  )
+			//copyDir(src , dest + "\\" + f.Name())
+		} else {
+			//fmt.Println(src)
+			//fmt.Println(src_original)
+			//fmt.Println(dest)
+			dest_new := strings.Replace(src, src_original, dest, -1)
+			//fmt.Println(dest_new)
+			fmt.Println("CopyFile:" + src + " to " + dest_new)
+			CopyFile(src, dest_new)
+		}
+		//println(path)
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("filepath.Walk() returned %v\n", err)
+	}
+}
+
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
+
+//copy file
+func CopyFile(src, dst string) (w int64, err error) {
+	srcFile, err := os.Open(src)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer srcFile.Close()
+	//fmt.Println("dst:" + dst)
+	dst_slices := strings.Split(dst, "\\")
+	dst_slices_len := len(dst_slices)
+	dest_dir := ""
+	for i := 0; i < dst_slices_len-1; i++ {
+		dest_dir = dest_dir + dst_slices[i] + "\\"
+	}
+	//dest_dir := getParentDirectory(dst)
+	//fmt.Println("dest_dir:" + dest_dir)
+	b, err := PathExists(dest_dir)
+	if b == false {
+		err := os.Mkdir(dest_dir, os.ModePerm) //在当前目录下生成md目录
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	dstFile, err := os.Create(dst)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	defer dstFile.Close()
+
+	return io.Copy(dstFile, srcFile)
+}
