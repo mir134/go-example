@@ -149,7 +149,7 @@ func CopyUser(user string)  {
 	b, _ := PathExists("old_data\\" + user)
 	//fmt.Println("CopyUser文件: ", b)
 	if b == true {
-		fmt.Println("文件: ", b)
+		//fmt.Println("文件: ", b)
 		b, _ := PathExists("new_data\\")
 		if b == false {
 			err := os.Mkdir("new_data\\", os.ModePerm) //在当前目录下生成md目录
