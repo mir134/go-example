@@ -4,14 +4,14 @@
 CMD 到file.exe 目录下，运行下面命令处理对应类型
 .\file.exe -f mm.txt -t 1  // 密码首字母大写
 .\file.exe -f mm.txt -t 2  // 替换用户名数字
-.\file.exe -f mm.txt -t 3  // 用户名加q
+.\file.exe -f mm.txt -t 3 -s k  // 用户名前加字符k
 .\file.exe -f mm.txt -t 4  // 用户名密码互换
 .\file.exe -f mm.txt -t 5  // 密码大写
 .\file.exe -f mm.txt -t 6  // 替换密码数字
 .\file.exe -f mm.txt -t 7  // 替换用户名截取少最后一位
-.\file.exe -f mm.txt -t 8  // 密码加1
-.\file.exe -f mm.txt -t 9  //  账号加1
-.\file.exe -f mm.txt -t 10  // 密码加叹号
+.\file.exe -f mm.txt -t 8 -s k  // 密码后加字符k
+.\file.exe -f mm.txt -t 9 -s k //  账号后加字符k
+.\file.exe -f mm.txt -t 10 -s k  // 密码前加字符k
 .\file.exe -f mm.txt -t 11  // 替换账号@后面字符
 .\file.exe -f mm.txt -t 12  // 替换用户名截取少第一位
 

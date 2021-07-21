@@ -38,7 +38,7 @@ func ReadBlock(filePath string) {
 	fmt.Println("readBolck spend : ", time.Now().Sub(start1))
 }
 
-func ReadEachLineReader(filePath string, fileType string) {
+func ReadEachLineReader(filePath string, fileType string, addStr string) {
 	start1 := time.Now()
 	FileHandle, err := os.Open(filePath)
 	if err != nil {
@@ -75,7 +75,7 @@ func ReadEachLineReader(filePath string, fileType string) {
 				case "2":
 					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], ReplaceNumber(countSplit[0]), 1)) // 替换用户名数字
 				case "3":
-					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], "q" + countSplit[0], 1)) // 用户名加q
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], addStr + countSplit[0], 1)) // 用户名前加q
 				case "4":
 					fmt.Fprintln(f,  countSplit[1] + "----" + countSplit[0]) // 用户名密码互换
 				case "5":
@@ -85,11 +85,11 @@ func ReadEachLineReader(filePath string, fileType string) {
 				case "7":
 					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0][0 : len(countSplit[0])-1], 1)) // 替换用户名截取少最后一位
 				case "8":
-					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], countSplit[1] + "1", 1)) // 密码加1
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], countSplit[1] + addStr, 1)) // 密码加1
 				case "9":
-					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0]+ "1", 1)) // 账号加1
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[0], countSplit[0]+ addStr, 1)) // 账号后加1
 				case "10":
-					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], countSplit[1] + "!", 1)) // 密码加叹号1
+					fmt.Fprintln(f, strings.Replace(string(line), countSplit[1], addStr + countSplit[1] , 1)) // 密码前叹号1
 				case "11":
 					pat := "@\\S+$"
 					re, _ := regexp.Compile(pat)
